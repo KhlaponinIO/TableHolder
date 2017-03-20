@@ -9,6 +9,7 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
+import jface.tableholder.view.EditPartCreator;
 import jface.tableholder.view.TableCreator;
 
 
@@ -44,9 +45,10 @@ public class TableHolder extends ApplicationWindow {
         
         
         SashForm form = new SashForm(composite, SWT.HORIZONTAL);
-        TableCreator tableCreator = new TableCreator(form);
         
-        new Button(form, SWT.PUSH).setText("Down"); //mock
+        
+        TableCreator tableCreator = new TableCreator(form);
+        EditPartCreator editPart = new EditPartCreator(form);
         
     }
 
