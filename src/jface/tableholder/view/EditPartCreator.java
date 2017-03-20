@@ -9,14 +9,25 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 public class EditPartCreator {
+    
+    private Text nameTextField;
+    private Text groupTextField;
+    private TableCreator tableCreator;
+    private Button checkTaskButton;
 
     public EditPartCreator(Composite parent) {
+        initUI(parent);
+    }
+    
+    public EditPartCreator(Composite parent, TableCreator tableCreator) {
+        this.tableCreator = tableCreator;
         initUI(parent);
     }
 
     private void initUI(Composite parent) {
 
         createFields(parent);
+        tableCreator.addRowSelectionEvent(nameTextField, groupTextField, checkTaskButton);
     }
 
     private void createFields(Composite parent) {
@@ -30,7 +41,7 @@ public class EditPartCreator {
         GridData nameGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, true);
         name.setLayoutData(nameGridData);
 
-        Text nameTextField = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+        nameTextField = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
         GridData nameTextFieldData = new GridData(SWT.FILL, SWT.BEGINNING, true, true);
         nameTextFieldData.horizontalAlignment = GridData.FILL;
         nameTextFieldData.horizontalSpan = 3;
@@ -41,7 +52,7 @@ public class EditPartCreator {
         GridData groupGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true);
         group.setLayoutData(groupGridData);
 
-        Text groupTextField = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
+        groupTextField = new Text(composite, SWT.SINGLE | SWT.BORDER | SWT.RIGHT);
         GridData groupTextFieldData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, true);
         groupTextFieldData.horizontalAlignment = GridData.FILL;
         groupTextFieldData.horizontalSpan = 3;
@@ -54,7 +65,7 @@ public class EditPartCreator {
         taskGridData.horizontalSpan = 3;
         task.setLayoutData(taskGridData);
 
-        Button checkTaskButton = new Button(composite, SWT.CHECK);
+        checkTaskButton = new Button(composite, SWT.CHECK);
         GridData checkTaskButtonGrid = new GridData(SWT.RIGHT, SWT.BEGINNING, true, true);
         checkTaskButtonGrid.horizontalSpan = 1;
         checkTaskButton.setLayoutData(checkTaskButtonGrid);

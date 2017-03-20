@@ -13,12 +13,21 @@ import jface.tableholder.view.EditPartCreator;
 import jface.tableholder.view.TableCreator;
 import jface.tableholder.view.actions.AddNewRowAction;
 import jface.tableholder.view.actions.CancelAction;
+import jface.tableholder.view.actions.CopyRowAction;
 import jface.tableholder.view.actions.DeleteFileAction;
+import jface.tableholder.view.actions.PasteRowAction;
 import jface.tableholder.view.actions.SaveAsFileAction;
 import jface.tableholder.view.actions.SaveFileAction;
 import jface.tableholder.view.actions.ShowAboutAction;
 
-
+/* TODO:
+ * 1. add listeners for the buttons on Edit part (don't forget about dispose() method)
+ * 2. modify actions for the menu (do not duplicate code!)
+ * 3. add JSON and XML files storage support
+ * 4. add modal window "Wanna save your changes"
+ * 5. add modal window with About information
+ * 6. add javadocs
+ */
 public class TableHolder extends ApplicationWindow {
     
     public TableHolder() {
@@ -30,11 +39,10 @@ public class TableHolder extends ApplicationWindow {
     protected Control createContents(Composite parent) {
 
         getShell().setText("JFace homework log");
-        getShell().setMinimumSize(600, 300);
+        getShell().setMinimumSize(800, 300);
         addMenuBar();
         layoutsSetting(parent);
         
-        // parent.pack();
         return parent;
     }
 
@@ -54,7 +62,7 @@ public class TableHolder extends ApplicationWindow {
         SashForm form = new SashForm(composite, SWT.HORIZONTAL);
         
         TableCreator tableCreator = new TableCreator(form);
-        EditPartCreator editPart = new EditPartCreator(form);
+        EditPartCreator editPart = new EditPartCreator(form, tableCreator);
         
     }
     
@@ -68,6 +76,8 @@ public class TableHolder extends ApplicationWindow {
         MenuManager editMenu = new MenuManager("&Edit");
         menuManager.add(editMenu);
         editMenu.add(new AddNewRowAction());
+        editMenu.add(new CopyRowAction());
+        editMenu.add(new PasteRowAction());
         editMenu.add(new DeleteFileAction());
         editMenu.add(new CancelAction());
         
