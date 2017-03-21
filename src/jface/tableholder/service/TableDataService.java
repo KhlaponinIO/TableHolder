@@ -9,9 +9,11 @@ import jface.tableholder.model.TableData;
 public class TableDataService {
 
     private DataProvider provider;
+    private TableData clipboardRow;
     
     public TableDataService() {
         provider = ArrayDataProvider.getInstance();
+        clipboardRow = null;
     }
     
     
@@ -37,5 +39,15 @@ public class TableDataService {
     
     public boolean updateRow(int index, TableData rowData) {
         return provider.update(index, rowData);
+    }
+    
+    public void copyRow(TableData rowData) {
+        clipboardRow = rowData;
+    }
+    
+    public void pasteRow() {
+        if (clipboardRow != null) {
+            addRow(clipboardRow);
+        }
     }
 }

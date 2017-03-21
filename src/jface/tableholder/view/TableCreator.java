@@ -125,4 +125,44 @@ public class TableCreator {
         tableViewer.refresh();
     }
 
+    public void addNewRow() {
+        dataService.addRow("-update me-", "0", false);
+        refreshViewer();
+    }
+
+    public void deleteRow() {
+        int index = tableViewer.getTable().getSelectionIndex();
+        if (index < 0) {
+            return;
+        }
+        dataService.deleteRow(index);
+        refreshViewer();
+    }
+
+    public void updateRow(String name, String group, boolean isDone) {
+        TableData rowData = new TableData(name, group, isDone);
+        int index = tableViewer.getTable().getSelectionIndex();
+        dataService.updateRow(index, rowData);
+        refreshViewer();
+    }
+
+    public void cancel() {
+        System.out.println("Canceled"); // mock
+        refreshViewer();
+    }
+
+    public void copyRow() {
+        int index = tableViewer.getTable().getSelectionIndex();
+        if (index >= 0) {
+            TableData clipboardData = dataService.getRow(index);
+            dataService.copyRow(clipboardData);
+        }
+    }
+
+    public void pasteRow() {
+
+        dataService.pasteRow();
+        refreshViewer();
+    }
+
 }

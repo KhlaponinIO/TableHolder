@@ -8,8 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
-import jface.tableholder.model.TableData;
-import jface.tableholder.service.TableDataService;
 
 public class EditPartCreator {
 
@@ -18,7 +16,6 @@ public class EditPartCreator {
     private Button checkTaskButton;
 
     private TableCreator tableCreator;
-    private TableDataService dataService = new TableDataService();
 
     private Button newButton;
     private Button saveButton;
@@ -105,30 +102,20 @@ public class EditPartCreator {
 
     public void addButtonsListeners() {
         newButton.addListener(SWT.Selection, event -> {
-            dataService.addRow("-update me-", "0", false);
-            tableCreator.refreshViewer();
+            tableCreator.addNewRow();
         });
 
         saveButton.addListener(SWT.Selection, event -> {
-            TableData rowData = new TableData(nameTextField.getText(), groupTextField.getText(),
+            tableCreator.updateRow(nameTextField.getText(), groupTextField.getText(),
                     checkTaskButton.getSelection());
-            int index = tableCreator.getTableViewer().getTable().getSelectionIndex();
-            dataService.updateRow(index, rowData);
-            tableCreator.refreshViewer();
         });
 
         deleteButton.addListener(SWT.Selection, event -> {
-            int index = tableCreator.getTableViewer().getTable().getSelectionIndex();
-            if (index < 0) {
-                return;
-            }
-            dataService.deleteRow(index);
-            tableCreator.refreshViewer();
+            tableCreator.deleteRow();
         });
 
         cancelButton.addListener(SWT.Selection, event -> {
-            System.out.println("Canceled"); // mock
-            tableCreator.refreshViewer();
+            tableCreator.cancel();
         });
     }
 

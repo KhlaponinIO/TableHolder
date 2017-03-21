@@ -1,6 +1,7 @@
 package jface.tableholder.view.actions;
 
 import org.eclipse.jface.action.Action;
+import org.eclipse.jface.dialogs.MessageDialog;
 
 public class ShowAboutAction extends Action {
     
@@ -10,7 +11,7 @@ public class ShowAboutAction extends Action {
     }
 
     public void run() {
-        System.out.println("show info about application"); //mock
+        MessageDialog.openInformation(null, "About", "This is JFace/SWT application");
     }
 
 }

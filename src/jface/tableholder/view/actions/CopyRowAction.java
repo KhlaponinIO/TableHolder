@@ -2,7 +2,11 @@ package jface.tableholder.view.actions;
 
 import org.eclipse.jface.action.Action;
 
+import jface.tableholder.view.TableCreator;
+
 public class CopyRowAction extends Action {
+    
+    private TableCreator tableCreator;
 
     public CopyRowAction() {
         super("&Copy@Ctrl+C", AS_PUSH_BUTTON);
@@ -10,6 +14,10 @@ public class CopyRowAction extends Action {
     }
 
     public void run() {
-        System.out.println("copy active line to the clipboard"); //mock
+        tableCreator.copyRow();
+    }
+    
+    public void setTableCreator(TableCreator tableCreator) {
+        this.tableCreator = tableCreator;
     }
 }

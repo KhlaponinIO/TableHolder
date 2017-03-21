@@ -2,7 +2,11 @@ package jface.tableholder.view.actions;
 
 import org.eclipse.jface.action.Action;
 
+import jface.tableholder.view.TableCreator;
+
 public class CancelAction extends Action {
+    
+    private TableCreator tableCreator;
 
     public CancelAction() {
         super("&Cancel", AS_PUSH_BUTTON);
@@ -10,6 +14,10 @@ public class CancelAction extends Action {
     }
 
     public void run() {
-        System.out.println("action canceled!"); //mock
+        tableCreator.cancel();
+    }
+    
+    public void setTableCreator(TableCreator tableCreator) {
+        this.tableCreator = tableCreator;
     }
 }

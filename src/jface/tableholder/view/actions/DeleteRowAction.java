@@ -4,20 +4,21 @@ import org.eclipse.jface.action.Action;
 
 import jface.tableholder.view.TableCreator;
 
-public class PasteRowAction extends Action {
+public class DeleteRowAction extends Action {
     
     private TableCreator tableCreator;
-
-    public PasteRowAction() {
-        super("&Paste@Ctrl+V", AS_PUSH_BUTTON);
-        setToolTipText("Paste line from clipboard");
+    
+    public DeleteRowAction() {
+        super("&Delete@Ctrl+D", AS_PUSH_BUTTON);
+        setToolTipText("Delete row");
     }
 
     public void run() {
-        tableCreator.pasteRow();
+        tableCreator.deleteRow();
     }
     
     public void setTableCreator(TableCreator tableCreator) {
         this.tableCreator = tableCreator;
     }
+
 }

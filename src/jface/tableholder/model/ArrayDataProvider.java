@@ -54,13 +54,8 @@ public class ArrayDataProvider implements DataProvider {
 
     @Override
     public boolean addRow(TableData rowData) {
-        if (data.contains(rowData)) {
-            System.out.println("Such user already exists!");
-            return false;
-        } else {
-            data.add(rowData);
-            return true;
-        }
+
+        return data.add(rowData);
     }
 
     @Override

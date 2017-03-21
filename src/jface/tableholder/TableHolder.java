@@ -14,21 +14,30 @@ import jface.tableholder.view.TableCreator;
 import jface.tableholder.view.actions.AddNewRowAction;
 import jface.tableholder.view.actions.CancelAction;
 import jface.tableholder.view.actions.CopyRowAction;
-import jface.tableholder.view.actions.DeleteFileAction;
+import jface.tableholder.view.actions.DeleteRowAction;
 import jface.tableholder.view.actions.PasteRowAction;
 import jface.tableholder.view.actions.SaveAsFileAction;
 import jface.tableholder.view.actions.SaveFileAction;
 import jface.tableholder.view.actions.ShowAboutAction;
 
 /* TODO:
- * 1. add listeners for the buttons on Edit part (don't forget about dispose() method)
- * 2. modify actions for the menu (do not duplicate code!)
- * 3. add JSON and XML files storage support
- * 4. add modal window "Wanna save your changes"
- * 5. add modal window with About information
- * 6. add javadocs
+ * 1. add dispose() method
+ * 2. add JSON and XML files storage support - done for JSON
+ * 3. add modal window "Wanna save your changes"
+ * 4. add javadocs
  */
 public class TableHolder extends ApplicationWindow {
+    
+    private TableCreator tableCreator;
+    
+    
+    private SaveFileAction saveFileAction;
+    private SaveAsFileAction saveAsFileAction;
+    private AddNewRowAction addNewRowAction;
+    private CopyRowAction copyRowAction;
+    private PasteRowAction pasteRowAction;
+    private DeleteRowAction deleteRowAction;
+    private CancelAction cancelAction;
     
     public TableHolder() {
         super(null);
@@ -40,12 +49,11 @@ public class TableHolder extends ApplicationWindow {
 
         getShell().setText("JFace homework log");
         getShell().setMinimumSize(800, 300);
-        addMenuBar();
         layoutsSetting(parent);
         
         return parent;
     }
-
+    
     public static void main(String[] args) {
         TableHolder holder = new TableHolder();
         holder.setBlockOnOpen(true);
@@ -61,8 +69,9 @@ public class TableHolder extends ApplicationWindow {
         
         SashForm form = new SashForm(composite, SWT.HORIZONTAL);
         
-        TableCreator tableCreator = new TableCreator(form);
+        tableCreator = new TableCreator(form);
         EditPartCreator editPart = new EditPartCreator(form, tableCreator);
+        setTableCreatorInActions(tableCreator);
         
     }
     
@@ -70,22 +79,41 @@ public class TableHolder extends ApplicationWindow {
         MenuManager menuManager = new MenuManager();
         MenuManager fileMenu = new MenuManager("&File");
         menuManager.add(fileMenu);
-        fileMenu.add(new SaveFileAction());
-        fileMenu.add(new SaveAsFileAction());
+        initActions();
+        fileMenu.add(saveFileAction);
+        fileMenu.add(saveAsFileAction);
         
         MenuManager editMenu = new MenuManager("&Edit");
         menuManager.add(editMenu);
-        editMenu.add(new AddNewRowAction());
-        editMenu.add(new CopyRowAction());
-        editMenu.add(new PasteRowAction());
-        editMenu.add(new DeleteFileAction());
-        editMenu.add(new CancelAction());
+        editMenu.add(addNewRowAction);
+        editMenu.add(copyRowAction);
+        editMenu.add(pasteRowAction);
+        editMenu.add(deleteRowAction);
+        editMenu.add(cancelAction);
         
         MenuManager aboutMenu = new MenuManager("&Help");
         menuManager.add(aboutMenu);
         aboutMenu.add(new ShowAboutAction());
         
         return menuManager;
+    }
+    
+    private void initActions() {
+        saveFileAction = new SaveFileAction();
+        saveAsFileAction = new SaveAsFileAction();
+        addNewRowAction = new AddNewRowAction();
+        copyRowAction = new CopyRowAction();
+        pasteRowAction = new PasteRowAction();
+        deleteRowAction = new DeleteRowAction();
+        cancelAction = new CancelAction();
+    }
+    
+    private void setTableCreatorInActions(TableCreator tableCreator) {
+        addNewRowAction.setTableCreator(tableCreator);
+        copyRowAction.setTableCreator(tableCreator);
+        pasteRowAction.setTableCreator(tableCreator);
+        deleteRowAction.setTableCreator(tableCreator);
+        cancelAction.setTableCreator(tableCreator);
     }
 
 }
