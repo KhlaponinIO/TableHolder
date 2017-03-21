@@ -10,22 +10,22 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
 
-import jface.tableholder.model.ArrayDataProvider;
-import jface.tableholder.model.DataProvider;
 import jface.tableholder.model.TableData;
+import jface.tableholder.service.TableDataService;
 
 public class TableCreator {
 
     private TableViewer tableViewer;
-    private DataProvider data;
+    private TableDataService dataService;
 
     public TableCreator(Composite parent) {
         // initialization
-        data = ArrayDataProvider.getInstance();
+        dataService = new TableDataService();
         buildAndLayoutTable(parent);
     }
 
@@ -40,7 +40,7 @@ public class TableCreator {
         table.setLinesVisible(true);
 
         tableViewer.setContentProvider(new ArrayContentProvider());
-        tableViewer.setInput(data.getData());
+        tableViewer.setInput(dataService.getData());
 
     }
 
@@ -99,16 +99,30 @@ public class TableCreator {
         });
     }
 
+    public void focusOnFirstRow(Event event) {
+
+    }
+
     private void showRowDataOnEditBar(IStructuredSelection selection, Text nameTextField, Text groupTextField,
             Button checkTaskButton) {
         TableData rowData = (TableData) selection.getFirstElement();
-        nameTextField.setText(rowData.getName());
-        groupTextField.setText(rowData.getGroup());
-        checkTaskButton.setSelection(rowData.isDone());
+        if (rowData == null) {
+            nameTextField.setText("");
+            groupTextField.setText("");
+            checkTaskButton.setSelection(false);
+        } else {
+            nameTextField.setText(rowData.getName());
+            groupTextField.setText(rowData.getGroup());
+            checkTaskButton.setSelection(rowData.isDone());
+        }
     }
 
     public TableViewer getTableViewer() {
         return tableViewer;
+    }
+
+    public void refreshViewer() {
+        tableViewer.refresh();
     }
 
 }

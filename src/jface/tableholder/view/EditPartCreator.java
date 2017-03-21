@@ -8,17 +8,27 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import jface.tableholder.model.TableData;
+import jface.tableholder.service.TableDataService;
+
 public class EditPartCreator {
-    
+
     private Text nameTextField;
     private Text groupTextField;
-    private TableCreator tableCreator;
     private Button checkTaskButton;
+
+    private TableCreator tableCreator;
+    private TableDataService dataService = new TableDataService();
+
+    private Button newButton;
+    private Button saveButton;
+    private Button deleteButton;
+    private Button cancelButton;
 
     public EditPartCreator(Composite parent) {
         initUI(parent);
     }
-    
+
     public EditPartCreator(Composite parent, TableCreator tableCreator) {
         this.tableCreator = tableCreator;
         initUI(parent);
@@ -69,26 +79,62 @@ public class EditPartCreator {
         GridData checkTaskButtonGrid = new GridData(SWT.RIGHT, SWT.BEGINNING, true, true);
         checkTaskButtonGrid.horizontalSpan = 1;
         checkTaskButton.setLayoutData(checkTaskButtonGrid);
-        
+
         addButtons(composite);
+        addButtonsListeners();
     }
-    
+
     private void addButtons(Composite parent) {
-        Button newButton = new Button(parent, SWT.PUSH);
+
+        newButton = new Button(parent, SWT.PUSH);
         newButton.setText("New");
         newButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
-        Button saveButton = new Button(parent, SWT.PUSH);
+        saveButton = new Button(parent, SWT.PUSH);
         saveButton.setText("Save");
         saveButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
-        Button deleteButton = new Button(parent, SWT.PUSH);
+        deleteButton = new Button(parent, SWT.PUSH);
         deleteButton.setText("Delete");
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
-        Button cancelButton = new Button(parent, SWT.PUSH);
+        cancelButton = new Button(parent, SWT.PUSH);
         cancelButton.setText("Cancel");
         cancelButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
+    }
+
+    public void addButtonsListeners() {
+        newButton.addListener(SWT.Selection, event -> {
+            dataService.addRow("-update me-", "0", false);
+            tableCreator.refreshViewer();
+        });
+
+        saveButton.addListener(SWT.Selection, event -> {
+            TableData rowData = new TableData(nameTextField.getText(), groupTextField.getText(),
+                    checkTaskButton.getSelection());
+            int index = tableCreator.getTableViewer().getTable().getSelectionIndex();
+            dataService.updateRow(index, rowData);
+            tableCreator.refreshViewer();
+        });
+
+        deleteButton.addListener(SWT.Selection, event -> {
+            int index = tableCreator.getTableViewer().getTable().getSelectionIndex();
+            if (index < 0) {
+                return;
+            }
+            dataService.deleteRow(index);
+            tableCreator.refreshViewer();
+        });
+
+        cancelButton.addListener(SWT.Selection, event -> {
+            System.out.println("Canceled"); // mock
+            tableCreator.refreshViewer();
+        });
+    }
+
+    public void removeButtonsListeners() {
+        // some code
+        
     }
 
 }
