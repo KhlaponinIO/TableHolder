@@ -23,13 +23,11 @@ import jface.tableholder.view.actions.ShowAboutAction;
 /* TODO:
  * 1. add dispose() method
  * 2. add JSON and XML files storage support - done for JSON
- * 3. add modal window "Wanna save your changes"
- * 4. add javadocs
+ * 3. add javadocs
  */
 public class TableHolder extends ApplicationWindow {
     
     private TableCreator tableCreator;
-    
     
     private SaveFileAction saveFileAction;
     private SaveAsFileAction saveAsFileAction;

@@ -3,6 +3,8 @@ package jface.tableholder.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import jface.tableholder.util.JsonFileWriter;
+
 public class ArrayDataProvider implements DataProvider {
 
     private List<TableData> data;
@@ -12,8 +14,11 @@ public class ArrayDataProvider implements DataProvider {
     }
 
     private ArrayDataProvider() {
-        data = new ArrayList<>();
-        initData();
+        data = JsonFileWriter.getDataFromJsonFile();
+        if (data == null) {
+            data = new ArrayList<>();
+            initData();
+        }
     }
 
     private void initData() {

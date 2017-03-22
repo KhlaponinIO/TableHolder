@@ -70,7 +70,9 @@ public class TableData {
         return true;
     }
     
-    
-    
+    @Override
+    public String toString() {
+        return "name: " + this.name + "; group: " + this.group + " " + "; SWT done: " + this.isDone;
+    }
     
 }
