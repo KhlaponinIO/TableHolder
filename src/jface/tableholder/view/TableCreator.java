@@ -146,9 +146,13 @@ public class TableCreator {
         refreshViewer();
     }
 
-    public void cancel() {
-        System.out.println("Canceled"); // mock
-        refreshViewer();
+    public void cancel(Text name, Text group, Button isDone) {
+        if (getSelectedRow() != null) {
+            name.setText(getSelectedRow().getName());
+            group.setText(getSelectedRow().getGroup());
+            isDone.setSelection(getSelectedRow().isDone());
+            refreshViewer();
+        }
     }
 
     public void copyRow() {
@@ -157,6 +161,10 @@ public class TableCreator {
             TableData clipboardData = dataService.getRow(index);
             dataService.copyRow(clipboardData);
         }
+    }
+
+    public TableData getSelectedRow() {
+        return dataService.getRow(tableViewer.getTable().getSelectionIndex());
     }
 
     public void pasteRow() {

@@ -31,6 +31,12 @@ public class ArrayDataProvider implements DataProvider {
         return SingletonHolder.INSTANCE;
     }
 
+    public void setData(String fileName) {
+        if (JsonFileWriter.getDataFromJsonFile(fileName) != null) {
+            data = JsonFileWriter.getDataFromJsonFile(fileName);
+        }
+    }
+
     @Override
     public List<TableData> getData() {
 
@@ -79,5 +85,15 @@ public class ArrayDataProvider implements DataProvider {
             return true;
         }
     }
+
+    /*
+     * public static void main(String[] args) { ArrayList<TableData> first = (ArrayList<TableData>)
+     * ArrayDataProvider.getInstance().getData();
+     * 
+     * first.forEach(System.out::println); System.out.println();
+     * 
+     * ArrayDataProvider.getInstance().setData("D:\\jsonData2.json"); ArrayList<TableData> second =
+     * (ArrayList<TableData>) ArrayDataProvider.getInstance().getData(); second.forEach(System.out::println); }
+     */
 
 }

@@ -3,7 +3,6 @@ package jface.tableholder;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.window.ApplicationWindow;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.custom.SashForm;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
@@ -11,19 +10,22 @@ import org.eclipse.swt.widgets.Display;
 
 import jface.tableholder.view.EditPartCreator;
 import jface.tableholder.view.TableCreator;
+import jface.tableholder.view.TableSashForm;
 import jface.tableholder.view.actions.AddNewRowAction;
-import jface.tableholder.view.actions.CancelAction;
 import jface.tableholder.view.actions.CopyRowAction;
 import jface.tableholder.view.actions.DeleteRowAction;
+import jface.tableholder.view.actions.ExitAction;
+import jface.tableholder.view.actions.OpenFileAction;
 import jface.tableholder.view.actions.PasteRowAction;
 import jface.tableholder.view.actions.SaveAsFileAction;
 import jface.tableholder.view.actions.SaveFileAction;
 import jface.tableholder.view.actions.ShowAboutAction;
 
 /* TODO:
- * 1. add dispose() method
- * 2. add JSON and XML files storage support - done for JSON
- * 3. add javadocs
+ * 1. add XML files storage support 
+ * 2. add javadocs
+ * 3. cell editor
+ * 4. change row event listener
  */
 public class TableHolder extends ApplicationWindow {
     
@@ -35,7 +37,8 @@ public class TableHolder extends ApplicationWindow {
     private CopyRowAction copyRowAction;
     private PasteRowAction pasteRowAction;
     private DeleteRowAction deleteRowAction;
-    private CancelAction cancelAction;
+    private ExitAction exitAction;
+    private OpenFileAction openFileAction;
     
     public TableHolder() {
         super(null);
@@ -65,7 +68,7 @@ public class TableHolder extends ApplicationWindow {
         Composite composite = new Composite(parent, SWT.NONE);
         composite.setLayout(new FillLayout());
         
-        SashForm form = new SashForm(composite, SWT.HORIZONTAL);
+        TableSashForm form = new TableSashForm(composite, SWT.HORIZONTAL);
         
         tableCreator = new TableCreator(form);
         EditPartCreator editPart = new EditPartCreator(form, tableCreator);
@@ -80,6 +83,8 @@ public class TableHolder extends ApplicationWindow {
         initActions();
         fileMenu.add(saveFileAction);
         fileMenu.add(saveAsFileAction);
+        fileMenu.add(openFileAction);
+        fileMenu.add(exitAction);
         
         MenuManager editMenu = new MenuManager("&Edit");
         menuManager.add(editMenu);
@@ -87,7 +92,6 @@ public class TableHolder extends ApplicationWindow {
         editMenu.add(copyRowAction);
         editMenu.add(pasteRowAction);
         editMenu.add(deleteRowAction);
-        editMenu.add(cancelAction);
         
         MenuManager aboutMenu = new MenuManager("&Help");
         menuManager.add(aboutMenu);
@@ -99,11 +103,12 @@ public class TableHolder extends ApplicationWindow {
     private void initActions() {
         saveFileAction = new SaveFileAction();
         saveAsFileAction = new SaveAsFileAction();
+        openFileAction = new OpenFileAction();
+        exitAction = new ExitAction(this);
         addNewRowAction = new AddNewRowAction();
         copyRowAction = new CopyRowAction();
         pasteRowAction = new PasteRowAction();
         deleteRowAction = new DeleteRowAction();
-        cancelAction = new CancelAction();
     }
     
     private void setTableCreatorInActions(TableCreator tableCreator) {
@@ -111,7 +116,7 @@ public class TableHolder extends ApplicationWindow {
         copyRowAction.setTableCreator(tableCreator);
         pasteRowAction.setTableCreator(tableCreator);
         deleteRowAction.setTableCreator(tableCreator);
-        cancelAction.setTableCreator(tableCreator);
+        openFileAction.setTableCreator(tableCreator);
     }
 
 }

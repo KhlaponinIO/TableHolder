@@ -17,11 +17,11 @@ public class JsonFileWriter {
 
     private static Gson gson = new Gson();
     public static final String PATH = "d:\\jsonData.json";
-    
+
     /**
      * Writes the list of <code>TableData</code> to the JSON file
-     * @param data
-     *            is the list of <code>TableData</code>
+     * 
+     * @param data is the list of <code>TableData</code>
      */
     public static void writeToJsonFile(List<TableData> data) {
 
@@ -33,31 +33,58 @@ public class JsonFileWriter {
     }
     
     /**
-     * Returns list of <code>TableData</code> from file 
-     * @return list of <code>TableData</code> or
-     *         <code>null</code> if file is absent or file contains different data
+     * Writes the list of <code>TableData</code> to the JSON file
+     * 
+     * @param data - list of <code>TableData</code>
+     * @param filePath - path to the file
+     */
+    public static void writeToJsonFile(List<TableData> data, String filePath) {
+
+        try (FileWriter fileWriter = new FileWriter(filePath)) {
+            fileWriter.write(gson.toJson(data));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Returns list of <code>TableData</code> from default file
+     * 
+     * @return list of <code>TableData</code> or <code>null</code> if file is absent or file contains different data
      */
     public static ArrayList<TableData> getDataFromJsonFile() {
-        
-        try (BufferedReader reader = new BufferedReader(new FileReader(PATH))) {
-            
+
+        return getDataFromJsonFile(PATH);
+    }
+
+
+    /**
+     * Returns list of <code>TableData</code> from selected file
+     * @param filePath - path to the file
+     * @return list of <code>TableData</code> or <code>null</code> if file is absent or file contains different data
+     */
+    public static ArrayList<TableData> getDataFromJsonFile(String filePath) {
+
+        try (BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+
             String fileData = "";
             String currentLine;
-            
+
             while ((currentLine = reader.readLine()) != null) {
                 fileData = fileData + currentLine;
             }
-            
-            Type listType = new TypeToken<ArrayList<TableData>>(){}.getType();
-            List<TableData> dataList = gson.fromJson(fileData, listType); 
-            
+
+            Type listType = new TypeToken<ArrayList<TableData>>() {
+            }.getType();
+            List<TableData> dataList = gson.fromJson(fileData, listType);
+
             return (ArrayList<TableData>) dataList;
-            
+
         } catch (IOException e) {
             return null;
         } catch (Exception e) {
             return null;
         }
     }
-    
+
 }

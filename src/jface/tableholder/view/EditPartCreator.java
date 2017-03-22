@@ -115,13 +115,8 @@ public class EditPartCreator {
         });
 
         cancelButton.addListener(SWT.Selection, event -> {
-            tableCreator.cancel();
+            tableCreator.cancel(nameTextField, groupTextField, checkTaskButton);
         });
-    }
-
-    public void removeButtonsListeners() {
-        // some code
-        
     }
 
 }
