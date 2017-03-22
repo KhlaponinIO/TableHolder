@@ -28,6 +28,5 @@ public class SaveAsFileAction extends Action {
         String path = fileDialog.open();
         
         FileService.saveDataToFile(tableService.getData(), path);
-        System.out.println("file saved to " + path);
     }
 }

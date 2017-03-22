@@ -86,14 +86,4 @@ public class ArrayDataProvider implements DataProvider {
         }
     }
 
-    /*
-     * public static void main(String[] args) { ArrayList<TableData> first = (ArrayList<TableData>)
-     * ArrayDataProvider.getInstance().getData();
-     * 
-     * first.forEach(System.out::println); System.out.println();
-     * 
-     * ArrayDataProvider.getInstance().setData("D:\\jsonData2.json"); ArrayList<TableData> second =
-     * (ArrayList<TableData>) ArrayDataProvider.getInstance().getData(); second.forEach(System.out::println); }
-     */
-
 }

@@ -8,6 +8,8 @@ import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.eclipse.jface.dialogs.MessageDialog;
+
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -25,11 +27,7 @@ public class JsonFileWriter {
      */
     public static void writeToJsonFile(List<TableData> data) {
 
-        try (FileWriter fileWriter = new FileWriter(PATH)) {
-            fileWriter.write(gson.toJson(data));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        writeToJsonFile(data, PATH);
     }
     
     /**
@@ -42,8 +40,9 @@ public class JsonFileWriter {
 
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             fileWriter.write(gson.toJson(data));
-        } catch (IOException e) {
-            e.printStackTrace();
+            System.out.println("file saved to " + filePath);
+        } catch (Exception e) {
+            MessageDialog.openError(null, "Error!", "File hasn't selected!");
         }
     }
 

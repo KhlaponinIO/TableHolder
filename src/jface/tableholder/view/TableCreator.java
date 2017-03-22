@@ -10,7 +10,6 @@ import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
-import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Table;
 import org.eclipse.swt.widgets.TableColumn;
 import org.eclipse.swt.widgets.Text;
@@ -47,6 +46,7 @@ public class TableCreator {
     private void createColumns(Composite parent, TableViewer viewer) {
 
         TableViewerColumn column1 = createTableViewerColumn("Name", 200, 0);
+        column1.setEditingSupport(new NameEditingSupport(tableViewer));
         column1.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {
@@ -97,10 +97,6 @@ public class TableCreator {
                 showRowDataOnEditBar(selection, nameTextField, groupTextField, checkTaskButton);
             }
         });
-    }
-
-    public void focusOnFirstRow(Event event) {
-
     }
 
     private void showRowDataOnEditBar(IStructuredSelection selection, Text nameTextField, Text groupTextField,

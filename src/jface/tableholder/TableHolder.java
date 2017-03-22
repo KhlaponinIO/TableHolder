@@ -24,7 +24,6 @@ import jface.tableholder.view.actions.ShowAboutAction;
 /* TODO:
  * 1. add XML files storage support 
  * 2. add javadocs
- * 3. cell editor
  * 4. change row event listener
  */
 public class TableHolder extends ApplicationWindow {

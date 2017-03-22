@@ -20,7 +20,6 @@ public class SaveFileAction extends Action {
     public void run() {
         if (MessageDialog.openQuestion(null, "Save file", "Want to save this table to " + JsonFileWriter.PATH + "?")) {
             FileService.saveDataToFile(dataService.getData());
-            System.out.println("file saved to " + JsonFileWriter.PATH);
         }
     }
 }
