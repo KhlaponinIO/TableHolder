@@ -1,11 +1,33 @@
 package jface.tableholder.model;
 
+
+/**
+ * Stores the data in the row of the <code>TableHolder</code>
+ * 
+ * @author Igor Khlaponin
+ *
+ */
 public class TableData {
 
+	/**
+	 * Name of the person
+	 */
     private String name;
+    /**
+     * Person's group
+     */
     private String group;
+    /**
+     * Show if person finished the task
+     */
     private boolean isDone;
     
+    /**
+     * Creates the instance of this class with next parameters
+     * @param name - name of the person
+     * @param group - its group
+     * @param done - show if he done task
+     */
     public TableData(String name, String group, boolean done) {
         this.name = name;
         this.group = group;

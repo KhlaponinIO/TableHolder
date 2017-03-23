@@ -15,9 +15,20 @@ import com.google.gson.reflect.TypeToken;
 
 import jface.tableholder.model.TableData;
 
+/**
+ * Util class for storing and obtaining data from the JSON file
+ * by using <code>Gson</code> library
+ *  
+ * @author Igor Khlaponin
+ *
+ */
 public class JsonFileWriter {
 
     private static Gson gson = new Gson();
+    
+    /**
+     * Default path to file for data storing in JSON file format
+     */
     public static final String PATH = "d:\\jsonData.json";
 
     /**

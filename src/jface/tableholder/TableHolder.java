@@ -23,7 +23,19 @@ import jface.tableholder.view.actions.ShowAboutAction;
 /* TODO:
  * 1. add XML files storage support 
  * 2. add javadocs
- * 4. change row event listener
+ */
+
+/**
+ * <code>TableHolder</code> is creates the task editor. Left side of the window
+ * contains the table (list) of the <code>TableData</code>, that contains the information
+ * about person, its group and check if he done the task.
+ * Right side of window contains editor bar for editing and saving row data.
+ * 
+ * <code>TableHolder</code> is a child of the <code>ApplicationWindow</code>
+ * Based on JFace and SWT libraries.
+ * 
+ * @author Igor Khlaponin
+ *
  */
 public class TableHolder extends ApplicationWindow {
     
@@ -38,6 +50,9 @@ public class TableHolder extends ApplicationWindow {
     private ExitAction exitAction;
     private OpenFileAction openFileAction;
     
+    /**
+     * Creates the instance of this class and adds the menu bar
+     */
     public TableHolder() {
         super(null);
         addMenuBar();
@@ -53,6 +68,10 @@ public class TableHolder extends ApplicationWindow {
         return parent;
     }
     
+    /**
+     * Root of the application
+     * @param args - String parameters (aren't necessary)
+     */
     public static void main(String[] args) {
         TableHolder holder = new TableHolder();
         holder.setBlockOnOpen(true);
@@ -72,6 +91,9 @@ public class TableHolder extends ApplicationWindow {
         
     }
     
+    /**
+     * Creates menu manager for menu items creation
+     */
     protected MenuManager createMenuManager() {
         MenuManager menuManager = new MenuManager();
         MenuManager fileMenu = new MenuManager("&File");

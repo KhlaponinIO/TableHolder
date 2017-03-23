@@ -5,12 +5,29 @@ import java.util.List;
 
 import jface.tableholder.util.JsonFileWriter;
 
+/**
+ * Implementation of <code>DataProvider</code> that stores the data in the <code>List</code>
+ * 
+ * @author Igor Khlaponin
+ *
+ */
 public class ArrayDataProvider implements DataProvider {
 
+	/**
+	 * Data storage. Contains the instances of <code>TableData</code>
+	 */
     private List<TableData> data;
 
     private static class SingletonHolder {
         private final static ArrayDataProvider INSTANCE = new ArrayDataProvider();
+    }
+    
+    /**
+     * Returns the instance of this class
+     * @return instance of <code>ArrayDataProvider</code>
+     */
+    public static ArrayDataProvider getInstance() {
+        return SingletonHolder.INSTANCE;
     }
 
     private ArrayDataProvider() {
@@ -27,10 +44,13 @@ public class ArrayDataProvider implements DataProvider {
         data.add(new TableData("Luk Skywalker", "1", true));
     }
 
-    public static ArrayDataProvider getInstance() {
-        return SingletonHolder.INSTANCE;
-    }
+    
 
+    /**
+     * Sets the data from the file
+     * If the path wrong or such file doesn't exit table will be fullfilled with default data 
+     * @param fileName - full path to the file where table data stored 
+     */
     public void setData(String fileName) {
         if (JsonFileWriter.getDataFromJsonFile(fileName) != null) {
             data = JsonFileWriter.getDataFromJsonFile(fileName);
