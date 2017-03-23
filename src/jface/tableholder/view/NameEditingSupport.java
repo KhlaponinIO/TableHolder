@@ -19,10 +19,6 @@ public class NameEditingSupport extends EditingSupport {
         this.editor = new TextCellEditor(viewer.getTable());
     }
     
-//    public NameEditingSupport(TableViewer viewer, EditPartCreator editPart) {
-//        this(viewer);
-//        this.editPart = editPart;
-//    }
 
     @Override
     protected CellEditor getCellEditor(Object element) {

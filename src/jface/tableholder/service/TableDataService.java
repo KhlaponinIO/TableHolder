@@ -49,7 +49,7 @@ public class TableDataService {
 
     public void pasteRow() {
         if (clipboardRow != null) {
-            addRow(clipboardRow);
+            addRow(new TableData(clipboardRow.getName(), clipboardRow.getGroup(), clipboardRow.isDone()));
         }
     }
 
