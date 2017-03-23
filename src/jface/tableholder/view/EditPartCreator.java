@@ -119,4 +119,16 @@ public class EditPartCreator {
         });
     }
 
+    public Text getNameTextField() {
+        return nameTextField;
+    }
+
+    public Text getGroupTextField() {
+        return groupTextField;
+    }
+
+    public Button getCheckTaskButton() {
+        return checkTaskButton;
+    }
+
 }

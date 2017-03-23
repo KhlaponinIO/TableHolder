@@ -8,7 +8,6 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Display;
 
-import jface.tableholder.view.EditPartCreator;
 import jface.tableholder.view.TableCreator;
 import jface.tableholder.view.TableSashForm;
 import jface.tableholder.view.actions.AddNewRowAction;
@@ -61,7 +60,6 @@ public class TableHolder extends ApplicationWindow {
         Display.getCurrent().dispose();
     }
     
-    @SuppressWarnings("unused")
     private void layoutsSetting(Composite parent) {
         
         Composite composite = new Composite(parent, SWT.NONE);
@@ -70,7 +68,6 @@ public class TableHolder extends ApplicationWindow {
         TableSashForm form = new TableSashForm(composite, SWT.HORIZONTAL);
         
         tableCreator = new TableCreator(form);
-        EditPartCreator editPart = new EditPartCreator(form, tableCreator);
         setTableCreatorInActions(tableCreator);
         
     }

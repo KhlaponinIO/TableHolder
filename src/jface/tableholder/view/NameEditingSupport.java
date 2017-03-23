@@ -11,12 +11,18 @@ public class NameEditingSupport extends EditingSupport {
     
     private TableViewer viewer;
     private CellEditor editor;
+    private EditPartCreator editPart;
 
     public NameEditingSupport(TableViewer viewer) {
         super(viewer);
         this.viewer = viewer;
         this.editor = new TextCellEditor(viewer.getTable());
     }
+    
+//    public NameEditingSupport(TableViewer viewer, EditPartCreator editPart) {
+//        this(viewer);
+//        this.editPart = editPart;
+//    }
 
     @Override
     protected CellEditor getCellEditor(Object element) {
@@ -36,7 +42,17 @@ public class NameEditingSupport extends EditingSupport {
     @Override
     protected void setValue(Object element, Object value) {
         ((TableData) element).setName(String.valueOf(value));
+        
+        //update edit part here
+        editPart.getNameTextField().setText(String.valueOf(value));
         viewer.update(element, null);
     }
 
+    public EditPartCreator getEditPart() {
+        return editPart;
+    }
+
+    public void setEditPart(EditPartCreator editPart) {
+        this.editPart = editPart;
+    }
 }

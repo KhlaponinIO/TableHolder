@@ -21,11 +21,20 @@ public class TableCreator {
 
     private TableViewer tableViewer;
     private TableDataService dataService;
+    private EditPartCreator editPart;
+    
+    private NameEditingSupport nameEditingSupport;
 
     public TableCreator(Composite parent) {
         // initialization
         dataService = new TableDataService();
         buildAndLayoutTable(parent);
+        editPart = new EditPartCreator(parent, this);
+        nameEditingSupport.setEditPart(editPart);
+    }
+
+    public EditPartCreator getEditPart() {
+        return editPart;
     }
 
     private void buildAndLayoutTable(Composite parent) {
@@ -46,7 +55,8 @@ public class TableCreator {
     private void createColumns(Composite parent, TableViewer viewer) {
 
         TableViewerColumn column1 = createTableViewerColumn("Name", 200, 0);
-        column1.setEditingSupport(new NameEditingSupport(tableViewer));
+        nameEditingSupport = new NameEditingSupport(tableViewer);
+        column1.setEditingSupport(nameEditingSupport);
         column1.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {
