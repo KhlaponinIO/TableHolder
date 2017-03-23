@@ -1,5 +1,6 @@
 package jface.tableholder.view;
 
+import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -103,11 +104,30 @@ public class TableCreator {
 
             @Override
             public void selectionChanged(final SelectionChangedEvent event) {
+                //checking of previous row changing
+                if (editPart.isPreviousRowIsChanged()) {
+                    if (MessageDialog.openQuestion(null, "Data have been changed", "Wanna save your changes?")) {
+                        dataService.updateRow(editPart.getPreviousIndex(), TableDataService.updatedRow);
+                        refreshViewer();
+                    } else {
+                        editPart.getNameTextField().setText(TableDataService.previousRow.getName());
+                        editPart.getGroupTextField().setText(TableDataService.previousRow.getGroup()); 
+                        editPart.getCheckTaskButton().setSelection(TableDataService.previousRow.isDone());
+                    }
+                }
+                
                 IStructuredSelection selection = (IStructuredSelection) event.getSelection();
                 showRowDataOnEditBar(selection, nameTextField, groupTextField, checkTaskButton);
+                
+                //set previous row parameters
+                TableDataService.previousRow = new TableData(nameTextField.getText(), 
+                        groupTextField.getText(), checkTaskButton.isEnabled());
+                editPart.setPreviousRowIsChanged(false);
+                editPart.setPreviousIndex(tableViewer.getTable().getSelectionIndex());
             }
         });
     }
+    
 
     private void showRowDataOnEditBar(IStructuredSelection selection, Text nameTextField, Text groupTextField,
             Button checkTaskButton) {

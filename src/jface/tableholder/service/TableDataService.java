@@ -7,6 +7,9 @@ import jface.tableholder.model.TableData;
 
 public class TableDataService {
 
+    public static TableData previousRow = new TableData("", "", false);
+    public static TableData updatedRow = new TableData("", "", false);
+    
     private ArrayDataProvider provider;
     private TableData clipboardRow;
 

@@ -1,6 +1,8 @@
 package jface.tableholder.view;
 
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.FocusEvent;
+import org.eclipse.swt.events.FocusListener;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Button;
@@ -8,12 +10,20 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
+import jface.tableholder.service.TableDataService;
+
 
 public class EditPartCreator {
 
     private Text nameTextField;
     private Text groupTextField;
     private Button checkTaskButton;
+    
+    private boolean previousRowIsChanged = false; 
+    private String tempName;
+    private String tempGroupNumber;
+    private boolean tempIsDone;
+    private int previousIndex = -1;
 
     private TableCreator tableCreator;
 
@@ -79,6 +89,7 @@ public class EditPartCreator {
 
         addButtons(composite);
         addButtonsListeners();
+        addTextFieldsListeners();
     }
 
     private void addButtons(Composite parent) {
@@ -118,6 +129,68 @@ public class EditPartCreator {
             tableCreator.cancel(nameTextField, groupTextField, checkTaskButton);
         });
     }
+    
+    public void addTextFieldsListeners() {
+        nameTextField.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                tempName = nameTextField.getText();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!tempName.equals(nameTextField.getText())) {
+                    //changes trigger
+                    previousRowIsChanged = true;
+                    TableDataService.updatedRow.setName(nameTextField.getText());
+                    TableDataService.updatedRow.setGroup(groupTextField.getText());
+                    TableDataService.updatedRow.setDone(checkTaskButton.getSelection());
+                }                   
+            }
+            
+        });
+        
+        groupTextField.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                tempGroupNumber = groupTextField.getText();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (!tempGroupNumber.equals(groupTextField.getText())) {
+                    //changes trigger
+                    previousRowIsChanged = true;
+                    TableDataService.updatedRow.setGroup(groupTextField.getText());
+                    TableDataService.updatedRow.setName(nameTextField.getText());
+                    TableDataService.updatedRow.setDone(checkTaskButton.getSelection());
+                }                   
+            }
+            
+        });
+        
+        checkTaskButton.addFocusListener(new FocusListener() {
+
+            @Override
+            public void focusGained(FocusEvent e) {
+                tempIsDone = checkTaskButton.getSelection();
+            }
+
+            @Override
+            public void focusLost(FocusEvent e) {
+                if (tempIsDone != checkTaskButton.getSelection()) {
+                    //changes trigger
+                    previousRowIsChanged = true;
+                    TableDataService.updatedRow.setDone(checkTaskButton.getSelection());
+                    TableDataService.updatedRow.setName(nameTextField.getText());
+                    TableDataService.updatedRow.setGroup(groupTextField.getText());
+                }                   
+            }
+            
+        });
+    }
 
     public Text getNameTextField() {
         return nameTextField;
@@ -129,6 +202,22 @@ public class EditPartCreator {
 
     public Button getCheckTaskButton() {
         return checkTaskButton;
+    }
+    
+    public boolean isPreviousRowIsChanged() {
+        return previousRowIsChanged;
+    }
+
+    public void setPreviousRowIsChanged(boolean previousRowIsChanged) {
+        this.previousRowIsChanged = previousRowIsChanged;
+    }
+
+    public int getPreviousIndex() {
+        return previousIndex;
+    }
+
+    public void setPreviousIndex(int previousIndex) {
+        this.previousIndex = previousIndex;
     }
 
 }
