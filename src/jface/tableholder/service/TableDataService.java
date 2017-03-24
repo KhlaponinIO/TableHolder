@@ -22,7 +22,6 @@ public class TableDataService {
      * Instance of <code>TableData</code> for storing copied (Ctrl + C) row for futher pasting (Ctrl + V) it to the
      * table - some kind of clipboard
      */
-//    private TableData clipboardRow;
 
     /**
      * Creates the instance of this class Instantiates <code>ArrayDataProvider</code> and clipboard
@@ -30,7 +29,6 @@ public class TableDataService {
      */
     public TableDataService() {
         provider = ArrayDataProvider.getInstance();
-//        clipboardRow = null;
     }
 
     /**
@@ -105,7 +103,6 @@ public class TableDataService {
      * @param rowData - current row (instance of <code>TableData</code>)
      */
     public void copyRow(TableData rowData) {
-//        clipboardRow = rowData;
         provider.copyRow(rowData);
     }
 
@@ -114,9 +111,6 @@ public class TableDataService {
      * list
      */
     public void pasteRow() {
-//        if (clipboardRow != null) {
-//            addRow(new TableData(clipboardRow));
-//        }
         provider.pasteRow();
     }
 
