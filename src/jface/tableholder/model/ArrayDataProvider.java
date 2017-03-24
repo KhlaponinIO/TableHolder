@@ -13,17 +13,27 @@ import jface.tableholder.util.JsonFileWriter;
  */
 public class ArrayDataProvider implements DataProvider {
 
-	/**
-	 * Data storage. Contains the instances of <code>TableData</code>
-	 */
+    /**
+     * Data storage. Contains the instances of <code>TableData</code>
+     */
     private List<TableData> data;
+
+    /**
+     * Storage for the previous row data. Used for cancelling changes in the row if the user isn't save changes
+     */
+    public TableData previousRow = new TableData("", "", false);
+    /**
+     * Storage for the updated row data. Used for updating table row from edit bar
+     */
+    public TableData updatedRow = new TableData("", "", false);
 
     private static class SingletonHolder {
         private final static ArrayDataProvider INSTANCE = new ArrayDataProvider();
     }
-    
+
     /**
      * Returns the instance of this class
+     * 
      * @return instance of <code>ArrayDataProvider</code>
      */
     public static ArrayDataProvider getInstance() {
@@ -44,12 +54,11 @@ public class ArrayDataProvider implements DataProvider {
         data.add(new TableData("Luk Skywalker", "1", true));
     }
 
-    
-
     /**
-     * Sets the data from the file
-     * If the path wrong or such file doesn't exit table will be fullfilled with default data 
-     * @param fileName - full path to the file where table data stored 
+     * Sets the data from the file If the path wrong or such file doesn't exit table will be fullfilled with default
+     * data
+     * 
+     * @param fileName - full path to the file where table data stored
      */
     public void setData(String fileName) {
         if (JsonFileWriter.getDataFromJsonFile(fileName) != null) {
@@ -104,6 +113,22 @@ public class ArrayDataProvider implements DataProvider {
             data.set(index, rowData);
             return true;
         }
+    }
+
+    public TableData getPreviousRow() {
+        return previousRow;
+    }
+
+    public void setPreviousRow(TableData previousRow) {
+        this.previousRow = previousRow;
+    }
+
+    public TableData getUpdatedRow() {
+        return updatedRow;
+    }
+
+    public void setUpdatedRow(TableData updatedRow) {
+        this.updatedRow = updatedRow;
     }
 
 }

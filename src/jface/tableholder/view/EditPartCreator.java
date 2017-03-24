@@ -1,5 +1,7 @@
 package jface.tableholder.view;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.FocusEvent;
 import org.eclipse.swt.events.FocusListener;
@@ -11,6 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 
 import jface.tableholder.service.TableDataService;
+import jface.tableholder.util.PackageUtil;
 
 
 public class EditPartCreator {
@@ -26,18 +29,41 @@ public class EditPartCreator {
     private int previousIndex = -1;
 
     private TableCreator tableCreator;
+    private TableDataService dataService;
 
     private Button newButton;
     private Button saveButton;
     private Button deleteButton;
     private Button cancelButton;
+    
+    private ResourceBundle rb;
+    private final String NEW_BUTTON_NAME;
+    private final String SAVE_BUTTON_NAME;
+    private final String DELETE_BUTTON_NAME;
+    private final String CANCEL_BUTTON_NAME;
+    private final String NAME_LABEL;
+    private final String GROUP_LABEL;
+    private final String TASK_LABEL;
+    
+    {
+        rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
+        NEW_BUTTON_NAME = rb.getString("EditPartCreator.button.new");
+        SAVE_BUTTON_NAME = rb.getString("EditPartCreator.button.save");
+        DELETE_BUTTON_NAME = rb.getString("EditPartCreator.button.delete");
+        CANCEL_BUTTON_NAME = rb.getString("EditPartCreator.button.cancel");
+        NAME_LABEL = rb.getString("EditPartCreator.label.name");
+        GROUP_LABEL = rb.getString("EditPartCreator.label.group");
+        TASK_LABEL = rb.getString("EditPartCreator.label.task");
+    }
 
     public EditPartCreator(Composite parent) {
+        dataService = new TableDataService();
         initUI(parent);
     }
 
     public EditPartCreator(Composite parent, TableCreator tableCreator) {
         this.tableCreator = tableCreator;
+        dataService = new TableDataService();
         initUI(parent);
     }
 
@@ -54,7 +80,7 @@ public class EditPartCreator {
         composite.setLayout(grid);
 
         Label name = new Label(composite, SWT.LEFT);
-        name.setText("Name:");
+        name.setText(NAME_LABEL);
         GridData nameGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, true);
         name.setLayoutData(nameGridData);
 
@@ -65,7 +91,7 @@ public class EditPartCreator {
         nameTextField.setLayoutData(nameTextFieldData);
 
         Label group = new Label(composite, SWT.LEFT);
-        group.setText("Group:");
+        group.setText(GROUP_LABEL);
         GridData groupGridData = new GridData(SWT.FILL, SWT.BEGINNING, true, true);
         group.setLayoutData(groupGridData);
 
@@ -76,7 +102,7 @@ public class EditPartCreator {
         groupTextField.setLayoutData(groupTextFieldData);
 
         Label task = new Label(composite, SWT.LEFT);
-        task.setText("SWT task done");
+        task.setText(TASK_LABEL);
         GridData taskGridData = new GridData(SWT.BEGINNING, SWT.BEGINNING, true, true);
         taskGridData.horizontalAlignment = GridData.FILL;
         taskGridData.horizontalSpan = 3;
@@ -95,19 +121,19 @@ public class EditPartCreator {
     private void addButtons(Composite parent) {
 
         newButton = new Button(parent, SWT.PUSH);
-        newButton.setText("New");
+        newButton.setText(NEW_BUTTON_NAME);
         newButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
         saveButton = new Button(parent, SWT.PUSH);
-        saveButton.setText("Save");
+        saveButton.setText(SAVE_BUTTON_NAME);
         saveButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
         deleteButton = new Button(parent, SWT.PUSH);
-        deleteButton.setText("Delete");
+        deleteButton.setText(DELETE_BUTTON_NAME);
         deleteButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
 
         cancelButton = new Button(parent, SWT.PUSH);
-        cancelButton.setText("Cancel");
+        cancelButton.setText(CANCEL_BUTTON_NAME);
         cancelButton.setLayoutData(new GridData(SWT.FILL, SWT.TOP, true, true));
     }
 
@@ -143,9 +169,8 @@ public class EditPartCreator {
                 if (!tempName.equals(nameTextField.getText())) {
                     //changes trigger
                     previousRowIsChanged = true;
-                    TableDataService.updatedRow.setName(nameTextField.getText());
-                    TableDataService.updatedRow.setGroup(groupTextField.getText());
-                    TableDataService.updatedRow.setDone(checkTaskButton.getSelection());
+                    setUpdatedRowData(nameTextField.getText(), groupTextField.getText(), 
+                            checkTaskButton.getSelection());
                 }                   
             }
             
@@ -163,9 +188,8 @@ public class EditPartCreator {
                 if (!tempGroupNumber.equals(groupTextField.getText())) {
                     //changes trigger
                     previousRowIsChanged = true;
-                    TableDataService.updatedRow.setGroup(groupTextField.getText());
-                    TableDataService.updatedRow.setName(nameTextField.getText());
-                    TableDataService.updatedRow.setDone(checkTaskButton.getSelection());
+                    setUpdatedRowData(nameTextField.getText(), groupTextField.getText(), 
+                            checkTaskButton.getSelection());
                 }                   
             }
             
@@ -183,13 +207,18 @@ public class EditPartCreator {
                 if (tempIsDone != checkTaskButton.getSelection()) {
                     //changes trigger
                     previousRowIsChanged = true;
-                    TableDataService.updatedRow.setDone(checkTaskButton.getSelection());
-                    TableDataService.updatedRow.setName(nameTextField.getText());
-                    TableDataService.updatedRow.setGroup(groupTextField.getText());
+                    setUpdatedRowData(nameTextField.getText(), groupTextField.getText(), 
+                            checkTaskButton.getSelection());
                 }                   
             }
             
         });
+    }
+    
+    private void setUpdatedRowData(String name, String group, boolean isDone) {
+        dataService.getUpdatedRow().setName(name);
+        dataService.getUpdatedRow().setGroup(group);
+        dataService.getUpdatedRow().setDone(isDone);
     }
 
     public Text getNameTextField() {
@@ -204,7 +233,7 @@ public class EditPartCreator {
         return checkTaskButton;
     }
     
-    public boolean isPreviousRowIsChanged() {
+    public boolean isPreviousRowChanged() {
         return previousRowIsChanged;
     }
 

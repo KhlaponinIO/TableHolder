@@ -1,5 +1,7 @@
 package jface.tableholder.view;
 
+import java.util.ResourceBundle;
+
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -17,6 +19,7 @@ import org.eclipse.swt.widgets.Text;
 
 import jface.tableholder.model.TableData;
 import jface.tableholder.service.TableDataService;
+import jface.tableholder.util.PackageUtil;
 
 public class TableCreator {
 
@@ -25,6 +28,22 @@ public class TableCreator {
     private EditPartCreator editPart;
     
     private NameEditingSupport nameEditingSupport;
+    
+    private ResourceBundle rb;
+    private final String FIRST_COLUMN_NAME;
+    private final String SECOND_COLUMN_NAME;
+    private final String THIRD_COLUMN_NAME;
+    private final String CHANGES_TITLE;
+    private final String CHANGES_MESSAGE;
+    
+    {
+        rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
+        FIRST_COLUMN_NAME = rb.getString("TableCreator.first.column.name");
+        SECOND_COLUMN_NAME = rb.getString("TableCreator.second.column.name");
+        THIRD_COLUMN_NAME = rb.getString("TableCreator.third.column.name");
+        CHANGES_TITLE = rb.getString("TableCreator.changes.title");
+        CHANGES_MESSAGE = rb.getString("TableCreator.changes.message");
+    }
 
     public TableCreator(Composite parent) {
         // initialization
@@ -55,7 +74,7 @@ public class TableCreator {
 
     private void createColumns(Composite parent, TableViewer viewer) {
 
-        TableViewerColumn column1 = createTableViewerColumn("Name", 200, 0);
+        TableViewerColumn column1 = createTableViewerColumn(FIRST_COLUMN_NAME, 200, 0);
         nameEditingSupport = new NameEditingSupport(tableViewer);
         column1.setEditingSupport(nameEditingSupport);
         column1.setLabelProvider(new ColumnLabelProvider() {
@@ -66,7 +85,7 @@ public class TableCreator {
             }
         });
 
-        TableViewerColumn column2 = createTableViewerColumn("Group", 100, 1);
+        TableViewerColumn column2 = createTableViewerColumn(SECOND_COLUMN_NAME, 100, 1);
         column2.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {
@@ -75,7 +94,7 @@ public class TableCreator {
             }
         });
 
-        TableViewerColumn column3 = createTableViewerColumn("SWT done", 100, 2);
+        TableViewerColumn column3 = createTableViewerColumn(THIRD_COLUMN_NAME, 100, 2);
         column3.setLabelProvider(new ColumnLabelProvider() {
             @Override
             public String getText(Object element) {
@@ -105,14 +124,14 @@ public class TableCreator {
             @Override
             public void selectionChanged(final SelectionChangedEvent event) {
                 //checking of previous row changing
-                if (editPart.isPreviousRowIsChanged()) {
-                    if (MessageDialog.openQuestion(null, "Data have been changed", "Wanna save your changes?")) {
-                        dataService.updateRow(editPart.getPreviousIndex(), TableDataService.updatedRow);
+                if (editPart.isPreviousRowChanged()) {
+                    if (MessageDialog.openQuestion(null, CHANGES_TITLE, CHANGES_MESSAGE)) {
+                        dataService.updateRow(editPart.getPreviousIndex(), dataService.getUpdatedRow());
                         refreshViewer();
                     } else {
-                        editPart.getNameTextField().setText(TableDataService.previousRow.getName());
-                        editPart.getGroupTextField().setText(TableDataService.previousRow.getGroup()); 
-                        editPart.getCheckTaskButton().setSelection(TableDataService.previousRow.isDone());
+                        editPart.getNameTextField().setText(dataService.getPreviousRow().getName());
+                        editPart.getGroupTextField().setText(dataService.getPreviousRow().getGroup()); 
+                        editPart.getCheckTaskButton().setSelection(dataService.getPreviousRow().isDone());
                     }
                 }
                 
@@ -120,8 +139,8 @@ public class TableCreator {
                 showRowDataOnEditBar(selection, nameTextField, groupTextField, checkTaskButton);
                 
                 //set previous row parameters
-                TableDataService.previousRow = new TableData(nameTextField.getText(), 
-                        groupTextField.getText(), checkTaskButton.isEnabled());
+                dataService.setPreviousRow(new TableData(nameTextField.getText(), 
+                        groupTextField.getText(), checkTaskButton.isEnabled()));
                 editPart.setPreviousRowIsChanged(false);
                 editPart.setPreviousIndex(tableViewer.getTable().getSelectionIndex());
             }

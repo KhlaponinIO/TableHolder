@@ -33,6 +33,16 @@ public class TableData {
         this.group = group;
         this.isDone = done;
     }
+    
+    /**
+     * Creates the new instance of this class based on another <class>TableData</class> instance
+     * @param data - instance for copying
+     */
+    public TableData(TableData data) {
+        this.name = data.getName();
+        this.group = data.getGroup();
+        this.isDone = data.isDone();
+    }
 
     public String getName() {
         return name;
