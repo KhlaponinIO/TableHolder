@@ -2,6 +2,7 @@ package jface.tableholder.view;
 
 import java.util.ResourceBundle;
 
+import org.eclipse.jface.action.Action;
 import org.eclipse.jface.dialogs.MessageDialog;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ColumnLabelProvider;
@@ -11,6 +12,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.TableViewer;
 import org.eclipse.jface.viewers.TableViewerColumn;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Table;
@@ -26,16 +29,16 @@ public class TableCreator {
     private TableViewer tableViewer;
     private TableDataService dataService;
     private EditPartCreator editPart;
-    
+
     private NameEditingSupport nameEditingSupport;
-    
+
     private ResourceBundle rb;
     private final String FIRST_COLUMN_NAME;
     private final String SECOND_COLUMN_NAME;
     private final String THIRD_COLUMN_NAME;
     private final String CHANGES_TITLE;
     private final String CHANGES_MESSAGE;
-    
+
     {
         rb = ResourceBundle.getBundle(PackageUtil.getPackageName(this.getClass()) + ".elementsNames");
         FIRST_COLUMN_NAME = rb.getString("TableCreator.first.column.name");
@@ -123,30 +126,29 @@ public class TableCreator {
 
             @Override
             public void selectionChanged(final SelectionChangedEvent event) {
-                //checking of previous row changing
+                // checking of previous row changing
                 if (editPart.isPreviousRowChanged()) {
                     if (MessageDialog.openQuestion(null, CHANGES_TITLE, CHANGES_MESSAGE)) {
                         dataService.updateRow(editPart.getPreviousIndex(), dataService.getUpdatedRow());
                         refreshViewer();
                     } else {
                         editPart.getNameTextField().setText(dataService.getPreviousRow().getName());
-                        editPart.getGroupTextField().setText(dataService.getPreviousRow().getGroup()); 
+                        editPart.getGroupTextField().setText(dataService.getPreviousRow().getGroup());
                         editPart.getCheckTaskButton().setSelection(dataService.getPreviousRow().isDone());
                     }
                 }
-                
+
                 IStructuredSelection selection = (IStructuredSelection) event.getSelection();
                 showRowDataOnEditBar(selection, nameTextField, groupTextField, checkTaskButton);
-                
-                //set previous row parameters
-                dataService.setPreviousRow(new TableData(nameTextField.getText(), 
-                        groupTextField.getText(), checkTaskButton.isEnabled()));
+
+                // set previous row parameters
+                dataService.setPreviousRow(
+                        new TableData(nameTextField.getText(), groupTextField.getText(), checkTaskButton.isEnabled()));
                 editPart.setPreviousRowIsChanged(false);
                 editPart.setPreviousIndex(tableViewer.getTable().getSelectionIndex());
             }
         });
     }
-    
 
     private void showRowDataOnEditBar(IStructuredSelection selection, Text nameTextField, Text groupTextField,
             Button checkTaskButton) {
@@ -216,6 +218,23 @@ public class TableCreator {
 
         dataService.pasteRow();
         refreshViewer();
+    }
+
+    public void setSelectionListenerOnTheTable(Action copyAction, Action pasteAction, Action deleteAction) {
+        tableViewer.getTable().addSelectionListener(new SelectionListener() {
+
+            @Override
+            public void widgetSelected(SelectionEvent e) {
+                copyAction.setEnabled(true);
+                deleteAction.setEnabled(true);
+            }
+
+            @Override
+            public void widgetDefaultSelected(SelectionEvent e) {
+                // do nothing
+            }
+            
+        });
     }
 
 }

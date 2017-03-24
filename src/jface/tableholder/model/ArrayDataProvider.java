@@ -26,7 +26,13 @@ public class ArrayDataProvider implements DataProvider {
      * Storage for the updated row data. Used for updating table row from edit bar
      */
     public TableData updatedRow = new TableData("", "", false);
-
+    
+    /**
+     * Instance of <code>TableData</code> for storing copied (Ctrl + C) row for futher pasting (Ctrl + V) it to the
+     * table - some kind of clipboard
+     */
+    private TableData clipboardRow;
+    
     private static class SingletonHolder {
         private final static ArrayDataProvider INSTANCE = new ArrayDataProvider();
     }
@@ -130,5 +136,24 @@ public class ArrayDataProvider implements DataProvider {
     public void setUpdatedRow(TableData updatedRow) {
         this.updatedRow = updatedRow;
     }
+    
+    /**
+     * Copy the row to the "clipboard"
+     * 
+     * @param rowData - current row (instance of <code>TableData</code>)
+     */
+    public void copyRow(TableData rowData) {
+        clipboardRow = rowData;
+    }
 
+    /**
+     * Paste the row to the list from the "clipboard". It obtains the row data from the clipboard and adds it to the
+     * list
+     */
+    public void pasteRow() {
+        if (clipboardRow != null) {
+            addRow(new TableData(clipboardRow));
+        }
+    }
+    
 }

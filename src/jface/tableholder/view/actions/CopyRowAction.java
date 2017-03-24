@@ -10,6 +10,9 @@ import jface.tableholder.view.TableCreator;
 public class CopyRowAction extends Action {
     
     private TableCreator tableCreator;
+    
+    private PasteRowAction pasteRowAction;
+    
     private ResourceBundle rb;
     private final String MENU_ITEM_NAME;
     private final String MENU_ITEM_TOOLTIP;
@@ -27,9 +30,14 @@ public class CopyRowAction extends Action {
 
     public void run() {
         tableCreator.copyRow();
+        pasteRowAction.setEnabled(true);
     }
     
     public void setTableCreator(TableCreator tableCreator) {
         this.tableCreator = tableCreator;
+    }
+
+    public void setPasteRowAction(PasteRowAction pasteRowAction) {
+        this.pasteRowAction = pasteRowAction;
     }
 }

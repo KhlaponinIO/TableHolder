@@ -88,7 +88,8 @@ public class TableHolder extends ApplicationWindow {
         
         tableCreator = new TableCreator(form);
         setTableCreatorInActions(tableCreator);
-        
+        tableCreator.setSelectionListenerOnTheTable(copyRowAction, pasteRowAction, deleteRowAction);
+        disableActions();
     }
     
     /**
@@ -126,6 +127,7 @@ public class TableHolder extends ApplicationWindow {
         addNewRowAction = new AddNewRowAction();
         copyRowAction = new CopyRowAction();
         pasteRowAction = new PasteRowAction();
+        copyRowAction.setPasteRowAction(pasteRowAction);
         deleteRowAction = new DeleteRowAction();
     }
     
@@ -136,5 +138,11 @@ public class TableHolder extends ApplicationWindow {
         deleteRowAction.setTableCreator(tableCreator);
         openFileAction.setTableCreator(tableCreator);
     }
-
+    
+    private void disableActions() {
+        copyRowAction.setEnabled(false);
+        deleteRowAction.setEnabled(false);
+        pasteRowAction.setEnabled(false);
+    }
+    
 }
